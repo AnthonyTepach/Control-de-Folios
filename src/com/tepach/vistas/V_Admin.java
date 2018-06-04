@@ -339,7 +339,7 @@ public class V_Admin extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Debes ser Administrador para gestionar a los usuarios", "Error de Autentificación", JOptionPane.INFORMATION_MESSAGE);
         }
-        
+
     }//GEN-LAST:event_jl_userMouseClicked
 
     private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
@@ -362,18 +362,18 @@ public class V_Admin extends javax.swing.JFrame {
 
     private void jl_proyectMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jl_proyectMouseClicked
         // TODO add your handling code here:
-        if (tipo.equals("admin")||tipo.equals("super")) {
+        if (tipo.equals("admin") || tipo.equals("super")) {
             panel_proyecto();
         } else {
             JOptionPane.showMessageDialog(this, "Debes ser Administrador o Supervisor para gestionar a los proyectos", "Error de Autentificación", JOptionPane.INFORMATION_MESSAGE);
         }
-        
+
     }//GEN-LAST:event_jl_proyectMouseClicked
 
     private void jl_reportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jl_reportMouseClicked
-       
-        if (tipo.equals("admin")||tipo.equals("super")) {
-          panel_reportes();
+
+        if (tipo.equals("admin") || tipo.equals("super")) {
+            panel_reportes();
         } else {
             JOptionPane.showMessageDialog(this, "Debes ser Administrador o Supervisor para gestionar a los reportes", "Error de Autentificación", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -381,17 +381,17 @@ public class V_Admin extends javax.swing.JFrame {
 
     private void jl_clientMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jl_clientMouseClicked
         // TODO add your handling code here:
-        if (tipo.equals("admin")||tipo.equals("super")) {
-         panel_cliente();
+        if (tipo.equals("admin") || tipo.equals("super")) {
+            panel_cliente();
         } else {
             JOptionPane.showMessageDialog(this, "Debes ser Administrador o Supervisor para gestionar a los clientes", "Error de Autentificación", JOptionPane.INFORMATION_MESSAGE);
         }
-        
+
     }//GEN-LAST:event_jl_clientMouseClicked
 
     private void jl_escanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jl_escanMouseClicked
         // TODO add your handling code here:
-        
+
         panel_escaner();
     }//GEN-LAST:event_jl_escanMouseClicked
 
@@ -457,7 +457,7 @@ public class V_Admin extends javax.swing.JFrame {
     private javax.swing.JLabel jl_logo;
     private javax.swing.JLabel jl_proyect;
     private javax.swing.JLabel jl_report;
-    private javax.swing.JLabel jl_titulo;
+    public static javax.swing.JLabel jl_titulo;
     private javax.swing.JLabel jl_user;
     private javax.swing.JLabel jl_usuario;
     private javax.swing.JPanel jp_principal;
@@ -473,7 +473,7 @@ public void panel_reportes() {
     }
 
     public void panel_cliente() {
-        jp_cliente jpp = new jp_cliente();
+        jp_cliente jpp = new jp_cliente(getter());
         jpp.setSize(670, 580);
         jpp.setLocation(0, 0);
         jp_principal.removeAll();
@@ -494,7 +494,7 @@ public void panel_reportes() {
 
     public void panel_proyecto() {
         jp_proyecto jpp = new jp_proyecto();
-       jpp.setSize(670, 580);
+        jpp.setSize(670, 580);
         jpp.setLocation(0, 0);
         jp_principal.removeAll();
         jp_principal.add(jpp, BorderLayout.CENTER);
@@ -510,5 +510,13 @@ public void panel_reportes() {
         jp_principal.add(jpp, BorderLayout.CENTER);
         jp_principal.revalidate();
         jp_principal.repaint();
+    }
+
+    private GetSet getter() {
+        GetSet gs = new GetSet();
+        gs.setId(this.id);
+        gs.setUser(this.user);
+        gs.setTipo(this.tipo);
+        return gs;
     }
 }

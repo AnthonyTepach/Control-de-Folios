@@ -149,6 +149,11 @@ public class Login extends javax.swing.JFrame {
                 jpf_passMouseClicked(evt);
             }
         });
+        jpf_pass.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jpf_passActionPerformed(evt);
+            }
+        });
         jp_inicio.add(jpf_pass, new org.netbeans.lib.awtextra.AbsoluteConstraints(62, 240, 195, 20));
 
         jPanel3.setBackground(new java.awt.Color(24, 143, 231));
@@ -258,52 +263,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jpf_passMouseClicked
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
-        GetSet gs = new GetSet();
-        jLabel7.setFocusable(true);
-        M_Usuario mu = new M_Usuario();
-        String tipo = null, user, id = null, u = null, p = null;
-        if (validaCampos()) {
-            gs.setPass(jpf_pass.getText());
-            gs.setUser(jtf_user.getText());
-
-            try {
-
-                ResultSet a = mu.GetU(gs);
-                if (!a.isBeforeFirst()) {
-                    JOptionPane.showMessageDialog(this, "Usuario y/o contraseña incorrecta", "Verifique sus datos", JOptionPane.INFORMATION_MESSAGE);
-                    mu.CloseDB();
-                } else {
-                    while (a.next()) {
-                        gs.setUser(a.getString(2));
-                        gs.setPass(a.getString(3));
-                        gs.setTipo(a.getString(4));
-                        gs.setId(a.getString(1));
-                    }
-                    if (gs.getTipo().equals("admin")|| gs.getTipo().equals("super")||gs.getTipo().equals("opera")) {
-                        V_Admin Vadmin=new V_Admin(gs);
-                        Vadmin.setVisible(true);
-                        this.setVisible(false);
-                        mu.CloseDB();
-                    } else {
-                        mu.CloseDB();
-                    }
-                    mu.CloseDB();
-                }
-
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, ex.getSQLState(), "Error SQL", JOptionPane.ERROR_MESSAGE);
-            } catch (HeadlessException ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error SQL", JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
-            if (jtf_user.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Ingresa tú usuario", "Error - Validacion de Datos", JOptionPane.ERROR_MESSAGE);
-            } else if (jpf_pass.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Ingresa la contraseña", "Error - Validacion de Datos", JOptionPane.ERROR_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(this, "Ingresa usuario y/o contraseña", "Error - Validacion de Datos", JOptionPane.ERROR_MESSAGE);
-            }
-        }
+        acceder();
     }//GEN-LAST:event_jLabel9MouseClicked
 
     private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseClicked
@@ -324,6 +284,10 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
         jLabel9.setCursor(Cursor.getPredefinedCursor(HAND_CURSOR));
     }//GEN-LAST:event_jLabel9MouseEntered
+
+    private void jpf_passActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jpf_passActionPerformed
+        acceder();
+    }//GEN-LAST:event_jpf_passActionPerformed
 
     /**
      * @param args the command line arguments
@@ -393,5 +357,54 @@ public class Login extends javax.swing.JFrame {
     public Image getIconImage() {
         Image retValue = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("com/tepach/imagen/bar-code-scanner.png"));
         return retValue;
+    }
+
+    private void acceder() {
+        GetSet gs = new GetSet();
+        jLabel7.setFocusable(true);
+        M_Usuario mu = new M_Usuario();
+        String tipo = null, user, id = null, u = null, p = null;
+        if (validaCampos()) {
+            gs.setPass(jpf_pass.getText());
+            gs.setUser(jtf_user.getText());
+
+            try {
+
+                ResultSet a = mu.GetU(gs);
+                if (!a.isBeforeFirst()) {
+                    JOptionPane.showMessageDialog(this, "Usuario y/o contraseña incorrecta", "Verifique sus datos", JOptionPane.INFORMATION_MESSAGE);
+                    mu.CloseDB();
+                } else {
+                    while (a.next()) {
+                        gs.setUser(a.getString(2));
+                        gs.setPass(a.getString(3));
+                        gs.setTipo(a.getString(4));
+                        gs.setId(a.getString(1));
+                    }
+                    if (gs.getTipo().equals("admin") || gs.getTipo().equals("super") || gs.getTipo().equals("opera")) {
+                        V_Admin Vadmin = new V_Admin(gs);
+                        Vadmin.setVisible(true);
+                        this.setVisible(false);
+                        mu.CloseDB();
+                    } else {
+                        mu.CloseDB();
+                    }
+                    mu.CloseDB();
+                }
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getSQLState(), "Error SQL", JOptionPane.ERROR_MESSAGE);
+            } catch (HeadlessException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error SQL", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            if (jtf_user.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Ingresa tú usuario", "Error - Validacion de Datos", JOptionPane.ERROR_MESSAGE);
+            } else if (jpf_pass.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Ingresa la contraseña", "Error - Validacion de Datos", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Ingresa usuario y/o contraseña", "Error - Validacion de Datos", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 }

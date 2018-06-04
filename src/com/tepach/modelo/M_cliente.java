@@ -6,6 +6,7 @@
 package com.tepach.modelo;
 
 import com.tepach.bd.ConexionBD;
+import java.awt.HeadlessException;
 import java.sql.Date;
 
 import java.sql.ResultSet;
@@ -22,10 +23,10 @@ public class M_cliente extends ConexionBD {
     public ResultSet getClientes() {
         Rs = null;
         try {
-            Pst = OpenDB().prepareCall("SELECT * FROM cf_cliente");
+            Pst = OpenDB().prepareCall("SELECT nom_cliente,fecha_registro,hora_registro,nom_user FROM cf_cliente NATURAL JOIN cf_usuarios ORDER BY fecha_registro,hora_registro ASC");
             Rs = Pst.executeQuery();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getSQLState(), "Error SQL", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error SQL", JOptionPane.ERROR_MESSAGE);
             Rs = null;
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error SQL", JOptionPane.ERROR_MESSAGE);
@@ -47,23 +48,18 @@ public class M_cliente extends ConexionBD {
             if (resp > 0) {
                 CloseDB();
                 JOptionPane.showMessageDialog(null, "Guardado", "OK", JOptionPane.INFORMATION_MESSAGE);
-            }else{
-                CloseDB();
-                JOptionPane.showMessageDialog(null, "No se guardo correctamente", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
-
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error SQL", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error SQL", JOptionPane.ERROR_MESSAGE);
-        }
+            String msj="SQL";
+            if (ex.getMessage().contains("Duplicate entry")) {
+                msj="de Duplicidad";
+            }else if(ex.getMessage().contains("data too long")){
+                msj="nombre del cliente muy largo";
+            }
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error "+msj, JOptionPane.ERROR_MESSAGE);
+        } 
        
     }
 
-    public static void main(String[] args) {
-        GetSet gs = new GetSet();
-        gs.setC_nombre("Prueba");
-        gs.setId("fa549a02-c47d-425d-bf7c-6f46ee9641a3");
-        new M_cliente().setCliente(gs);
-    }
+    
 }
