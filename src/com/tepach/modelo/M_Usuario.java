@@ -57,6 +57,33 @@ public class M_Usuario extends ConexionBD {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error " + msj, JOptionPane.ERROR_MESSAGE);
         }
     }
+    public ResultSet getall() {
+    try {
+      Rs = null;
+      Pst = OpenDB().prepareStatement("SELECT * FROM cf_usuarios");
+      Rs = Pst.executeQuery();
+
+    }
+    catch (SQLException ex)
+    {
+      JOptionPane.showMessageDialog(null, ex.getMessage(), "Error SQL", 0);
+          
+    }
+   
+    return Rs;
+    
+  }
+      public ResultSet getusuario(GetSet gs) {
+    try {
+      Rs = null;
+      Pst = OpenDB().prepareStatement("SELECT * FROM cf_usuarios WHERE nom_user = ?");
+      Pst.setString(1, gs.getUser());
+      Rs = Pst.executeQuery();
+    } catch (SQLException ex) {
+      JOptionPane.showMessageDialog(null, ex.getMessage(), "Error SQL", 0);
+    }
+    return Rs;
+  }
     public static void main(String[] args) {
         GetSet a=new GetSet();
         a.setId(a.crearUUID());

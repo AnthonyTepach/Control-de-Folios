@@ -27,7 +27,7 @@ public class C_random {
         for (byte b : hash) {
             sb.append(String.format("%02x", b));
         }
-        return sb.toString();
+        return sb.toString().substring(0, 12);
     }
 
 }

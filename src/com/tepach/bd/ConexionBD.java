@@ -5,11 +5,11 @@ import javax.swing.JOptionPane;
 
 public class ConexionBD {
 
-    private String user;
-    private String pass;
+    private final String user;
+    private final String pass;
     private String server;
-    private String DB;
-    private String DriverMySQL;
+    private final String DB;
+    private final String DriverMySQL;
     private Connection con;
     protected ResultSet Rs;
     protected CallableStatement Cst;
@@ -17,21 +17,21 @@ public class ConexionBD {
     protected PreparedStatement Pst;
 
     public ConexionBD() {
-        user = "anthonytepach";
-        pass = "Tbryan.1996";
-        server = "jdbc:mysql://192.168.1.166:3306/";
-        DB = "cf_escaneo";
-        DriverMySQL = "com.mysql.jdbc.Driver";
-        con = null;
+        this.user = "anthonytepach";
+        this.pass = "Tbryan.1996";
+        this.server = "jdbc:mysql://192.168.1.166:3306/";
+        this.DB = "cf_escaneo";
+        this.DriverMySQL = "com.mysql.jdbc.Driver";
+        this.con = null;
 
     }
      public ConexionBD(String usuario,String contrasenia) {
-        user = usuario;
-        pass = contrasenia;
-        server = "jdbc:mysql://localhost/";
-        DB = "GASORED";
-        DriverMySQL = "com.mysql.jdbc.Driver";
-        con = null;
+        this.user = usuario;
+        this.pass = contrasenia;
+        this.server = "jdbc:mysql://localhost/";
+        this.DB = "GASORED";
+        this.DriverMySQL = "com.mysql.jdbc.Driver";
+        this.con = null;
 
     }
 
@@ -53,35 +53,29 @@ public class ConexionBD {
 
     public void CloseDB() {
         try {
-            if (Cst != null) {
-                Cst.close();
+            if (this.Cst != null) {
+                this.Cst.close();
                 //System.out.println("CST Cerrada");
             }
-            if (Pst != null) {
-                Pst.close();
+            if (this.Pst != null) {
+                this.Pst.close();
                 //System.out.println("PST Cerrada");
             }
-            if (Rs != null) {
-                Rs.close();
+            if (this.Rs != null) {
+                this.Rs.close();
                 //System.out.println("RS Cerrada");
             }
-            if (St != null) {
-                St.close();
+            if (this.St != null) {
+                this.St.close();
                 //System.out.println("ST Cerrada");
             }
-            if (con != null) {
-                con.close();
+            if (this.con != null) {
+                this.con.close();
                 //System.out.println("CON cerrada");
             }
 
         } catch (SQLException sqle) {
             System.out.println("Error al cerra las conexiones: " + sqle.getMessage());
         }
-    }
-
-    public static void main(String[] args) {
-        ConexionBD a=new ConexionBD();
-        a.OpenDB();
-        a.CloseDB();
     }
 }

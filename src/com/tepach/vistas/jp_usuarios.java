@@ -5,6 +5,9 @@
  */
 package com.tepach.vistas;
 
+import com.tepach.modelo.GetSet;
+import com.tepach.modelo.M_Usuario;
+
 /**
  *
  * @author inspector
@@ -16,6 +19,23 @@ public class jp_usuarios extends javax.swing.JPanel {
      */
     public jp_usuarios() {
         initComponents();
+        llenarLista();
+    }
+
+    private String is() {
+        String t = null;
+        switch (jComboBox1.getSelectedIndex()) {
+            case 0:
+                t = "admin";
+                break;
+            case 1:
+                t = "super";
+                break;
+            case 2:
+                t = "opera";
+                break;
+        }
+        return t;
     }
 
     /**
@@ -32,6 +52,8 @@ public class jp_usuarios extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jtf_Nom_user = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jl_usuarios = new javax.swing.JList<>();
 
         setBackground(new java.awt.Color(24, 143, 231));
 
@@ -58,6 +80,13 @@ public class jp_usuarios extends javax.swing.JPanel {
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador", "Supervisor", "Operador" }));
         jComboBox1.setBorder(null);
 
+        jl_usuarios.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jl_usuariosValueChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jl_usuarios);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -70,12 +99,15 @@ public class jp_usuarios extends javax.swing.JPanel {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jtf_Nom_user))
-                        .addGap(18, 18, 18)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(25, Short.MAX_VALUE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jtf_Nom_user))
+                                .addGap(18, 18, 18)
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(25, 25, 25))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -89,20 +121,55 @@ public class jp_usuarios extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jComboBox1))
-                .addContainerGap(220, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jtf_Nom_userActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtf_Nom_userActionPerformed
-       
+        M_Usuario mu = new M_Usuario();
+        GetSet gs = new GetSet();
+        gs.setId(gs.crearUUID());
+        gs.setTipo(is());
+        gs.setUser(jtf_Nom_user.getText());
+        mu.NuevoUsusario(gs);
+        llenarLista();
     }//GEN-LAST:event_jtf_Nom_userActionPerformed
 
+    private void jl_usuariosValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jl_usuariosValueChanged
+        // TODO add your handling code here:
+        GetSet gs = new GetSet();
+        gs.setUser((String) jl_usuarios.getSelectedValue());
+        M_Usuario ms = new M_Usuario();
+        com.tepach.controlador.C_generarPDF cg = new com.tepach.controlador.C_generarPDF();
+        cg.write(ms.getusuario(gs));
+        javax.swing.JOptionPane.showMessageDialog(this, "Guadado");
+    }//GEN-LAST:event_jl_usuariosValueChanged
+    private void llenarLista() {
+        try {
+            javax.swing.DefaultListModel modelo = new javax.swing.DefaultListModel();
+            M_Usuario ms = new M_Usuario();
+            java.sql.ResultSet rss = ms.getall();
+            while (rss.next()) {
+                modelo.addElement(rss.getString(2));
+            }
+            jl_usuarios.setModel(modelo);
+            if (rss != null) {
+                rss.close();
+            }
+        } catch (java.sql.SQLException ex) {
+            javax.swing.JOptionPane.showMessageDialog(null, ex.getMessage(), "Error SQL", 0);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bntGroup;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JList<String> jl_usuarios;
     private javax.swing.JTextField jtf_Nom_user;
     // End of variables declaration//GEN-END:variables
 }
